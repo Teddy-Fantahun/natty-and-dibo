@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natty & Dibo | Wedding</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Noto+Sans+Ethiopic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase for the Digital Sign Board -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#fcfbf7',
+                        espresso: '#4E3629', 
+                        'espresso-light': '#C6A88F', 
+                        darktext: '#333333',
+                        cardbg: '#f2efe6',
+                        gold: '#d4b47a'
+                    },
+                    fontFamily: {
+                        cursive: ['"Great Vibes"', 'cursive'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        ethiopic: ['"CustomAmharic"', '"Noto Sans Ethiopic"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CUSTOM FONT SETUP */
+        @font-face {
+            font-family: 'CustomAmharic';
+            src: url('fonts/benaiah.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        body { background-color: #fcfbf7; color: #333333; }
+        .fade-in { animation: fadeIn 1.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Custom scrollbar for gallery */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Prevent scrolling when landing page is active */
+        body.no-scroll { overflow: hidden; }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden no-scroll">
+
+    <!-- ========================================== -->
+    <!-- LANDING PAGE OVERLAY -->
+    <!-- ========================================== -->
+    <div id="landing-page" class="fixed inset-0 z-[100] bg-cream flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="text-center px-4">
+            <img src="images/logo.png" alt="Natty & Dibo Logo" class="w-64 h-64 md:w-96 md:h-96 object-contain mx-auto mb-8 drop-shadow-xl" onerror="this.src='https://via.placeholder.com/400?text=Place+Logo+Here'">
+            
+            <button id="openInvitationBtn" class="bg-espresso text-cream px-10 py-4 rounded-full font-serif text-xl tracking-widest hover:bg-[#3a271d] transition-all transform hover:scale-105 shadow-lg">
+                Open Invitation
+            </button>
+        </div>
+        
+        <div class="absolute bottom-8 text-center w-full">
+            <p class="font-cursive text-4xl text-espresso">Natty & Dibo</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MAIN WEBSITE (Hidden initially) -->
+    <!-- ========================================== -->
+    <div id="main-content" class="opacity-0 transition-opacity duration-1000">
+
+        <!-- Navigation -->
+        <nav class="fixed w-full bg-cream/90 backdrop-blur-sm z-50 border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="#" class="font-cursive text-4xl text-espresso">Natty & Dibo</a>
+                    </div>
+                    <div class="hidden md:flex space-x-6 lg:space-x-8">
+                        <a href="#home" class="text-gray-600 hover:text-espresso font-medium tracking-wide">HOME</a>
+                        <a href="#schedule" class="text-gray-600 hover:text-espresso font-medium tracking-wide">SCHEDULE</a>
+                        <a href="#location" class="text-gray-600 hover:text-espresso font-medium tracking-wide">LOCATION</a>
+                        <a href="#wishes" class="text-gray-600 hover:text-espresso font-medium tracking-wide">WISHES</a>
+                        <a href="#thankucard" class="text-gray-600 hover:text-espresso font-medium tracking-wide">THANKUCARD</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="pt-32 pb-20 px-4 max-w-7xl mx-auto min-h-screen flex items-center">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1 text-center md:text-left">
+                    <img src="images/hero.jpg" alt="Natty and Dibo" class="rounded-3xl shadow-2xl object-cover h-[600px] w-full">
+                </div>
+                <div class="order-1 md:order-2 text-center md:text-left fade-in">
+                    <h1 class="font-cursive text-6xl md:text-8xl text-espresso mb-6">Natty & Dibo</h1>
+                    <h2 class="font-ethiopic text-2xl md:text-3xl text-espresso font-bold mb-6 leading-relaxed">
+                        "ስለዚህ ሰው ከአባቱና ከእናቱ ተለይቶ ከሚስቱ ጋራ ይጣመራል፤ ሁለቱም አንድ ሥጋ ይሆናሉ።"
+                    </h2>
+                    <p class="text-gray-500 font-ethiopic text-xl font-bold">- ዘፍጥረት 2:24</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Invitation Message & Save the Date Section -->
+        <section class="py-20 bg-cardbg">
+            <div class="max-w-4xl mx-auto px-4 text-center mb-16">
+                <p class="font-ethiopic text-xl md:text-2xl text-gray-800 leading-loose mb-10">
+                    የማክበር ሰላምታችንን እያቀረብን፣ በዚህ ልዩ የደስታችን ቀን የጋብቻ የቃል ኪዳን ስነስርዓቱን እንድትካፈሉ ከቤተሰቦቻችን ጋር በጌታ ፍቅር ተጋብዘዋል።
+                </p>
+                <div class="space-y-3 font-ethiopic text-lg md:text-xl text-espresso font-bold">
+                    <p>አቶ ናትናኤል ላቀው እና ወ/ሪት ዲቦራ ጌታቸው</p>
+                    <p>እሁድ፣ ህዳር 6 ቀን 2019 ዓ.ም</p>
+                    <p>7፡00 ከሰአት ጀምሮ</p>
+                </div>
+            </div>
+
+            <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+                <!-- Calendar Mockup -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm text-center">
+                    <h3 class="text-gray-500 font-semibold tracking-widest mb-6">NOVEMBER 15, 2026</h3>
+                    <div class="grid grid-cols-7 gap-2 text-sm text-gray-400 mb-2">
+                        <div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div><div>Su</div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-2 text-lg">
+                        <div class="text-transparent">.</div><div class="text-transparent">.</div><div class="text-transparent">.</div><div class="text-transparent">.</div><div class="text-transparent">.</div><div class="text-transparent">.</div><div>1</div>
+                        <div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div>
+                        <div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div>
+                        <div class="bg-espresso text-white rounded-full w-10 h-10 flex items-center justify-center mx-auto shadow-md">15</div>
+                        <div>16</div><div>17</div><div>18</div><div>19</div><div>20</div><div>21</div><div>22</div>
+                        <div>23</div><div>24</div><div>25</div><div>26</div><div>27</div><div>28</div><div>29</div><div>30</div>
+                    </div>
+                </div>
+                
+                <div class="text-center md:text-left">
+                    <h2 class="font-serif text-5xl text-espresso uppercase mb-6 tracking-wide">Save The Date</h2>
+                    <p class="text-gray-600 text-lg mb-4">Together with our families, we invite you to celebrate our marriage on November 15, 2026, starting at 1:00 PM (7:00 LT).</p>
+                    <h3 class="font-ethiopic text-3xl text-espresso font-bold mb-4">እሁድ፣ ህዳር 6 ቀን 2019 ዓ.ም</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCHEDULE SECTION -->
+        <!-- ========================================== -->
+        <section id="schedule" class="py-20 bg-espresso text-white relative">
+            <!-- Subtle background pattern -->
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#d4b47a_1px,transparent_1px)] [background-size:20px_20px]"></div>
+            
+            <div class="max-w-5xl mx-auto px-4 relative z-10">
+                
+                <!-- Header -->
+                <div class="text-center mb-16">
+                    <h4 class="font-ethiopic text-gold uppercase tracking-widest text-sm mb-4 font-semibold">የሰርጉ መርሀግብር</h4>
+                    <h2 class="font-ethiopic text-4xl md:text-5xl text-white">ሁለት ማለዳዎች፣ አንድ ቃልኪዳን</h2>
+                </div>
+
+                <!-- Two Columns (Groom & Bride) -->
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 mb-8">
+                    
+                    <!-- Groom's Home -->
+                    <div>
+                        <h3 class="font-ethiopic text-gold text-2xl mb-6 text-center">የሙሽራው ቤት</h3>
+                        <div class="space-y-4">
+                            <!-- Card 1 -->
+                            <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                                <div class="font-ethiopic text-2xl mb-2">3:00–4:00 ሰዓት</div>
+                                <div class="font-ethiopic text-lg">የፎቶ ስነስርዓት</div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                                <div class="font-ethiopic text-2xl mb-2">4:00–4:30 ሰዓት</div>
+                                <div class="font-ethiopic text-lg">አምልኮ</div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                                <div class="font-ethiopic text-2xl mb-2">4:30–5:10 ሰዓት</div>
+                                <div class="font-ethiopic text-lg">ጉዞ ወደ ሙሽሪት ቤት</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bride's Home -->
+                    <div>
+                        <h3 class="font-ethiopic text-gold text-2xl mb-6 text-center">የሙሽሪት ቤት</h3>
+                        <div class="space-y-4">
+                            <!-- Card 1 -->
+                            <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                                <div class="font-ethiopic text-2xl mb-2">3:00–4:00 ሰዓት</div>
+                                <div class="font-ethiopic text-lg">የፎቶ ስነስርዓት</div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                                <div class="font-ethiopic text-2xl mb-2">4:00–5:00 ሰዓት</div>
+                                <div class="font-ethiopic text-lg">አምልኮ</div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                                <div class="font-ethiopic text-2xl mb-2">5:10–6:00 ሰዓት</div>
+                                <div class="font-ethiopic text-lg">ሙሽራውን መቀበል እና የፎቶ ስነስርዓት</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- V-Shape Divider -->
+                <div class="flex justify-center mb-8">
+                    <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 0 L60 35 L115 0" stroke="#d4b47a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <!-- Both Families, Together -->
+                <div class="max-w-2xl mx-auto">
+                    <h3 class="font-ethiopic text-gold text-2xl mb-6 text-center">ሁለቱም ቤተሰቦች አንድ ላይ</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Card 1 -->
+                        <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                            <div class="font-ethiopic text-2xl mb-2">6:00–7:00 ሰዓት</div>
+                            <div class="font-ethiopic text-lg">ጉዞ ወደ ቂርቆስ መካነየሱስ ቤተክርስቲያን</div>
+                        </div>
+                        
+                        <!-- The Vow (Highlighted) -->
+                        <div class="relative bg-[#fcfbf7] text-espresso p-8 rounded shadow-lg border-l-4 border-gold mt-6 mb-6">
+                            <div class="absolute top-0 right-0 bg-gold text-espresso px-4 py-1 text-[10px] font-bold tracking-widest uppercase rounded-bl">
+                                THE VOW
+                            </div>
+                            <div class="font-ethiopic text-3xl mb-3">8:00 ሰዓት</div>
+                            <div class="font-ethiopic text-xl font-medium">የቃልኪዳን ስነስርዓት እና አምልኮ</div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="bg-[#EADBC8] text-espresso p-6 rounded shadow-sm">
+                            <div class="font-ethiopic text-2xl mb-2">9:00 ሰዓት</div>
+                            <div class="font-ethiopic text-lg">የፕሮግራም ማብቂያ</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Location Section -->
+        <section id="location" class="py-20 max-w-7xl mx-auto px-4">
+            <h2 class="font-serif text-5xl text-espresso text-center uppercase mb-16 tracking-wide">Location</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-center md:text-left">
+                    <h3 class="font-ethiopic text-3xl text-espresso font-bold uppercase mb-4 leading-normal">
+                        የኢትዮጵያ ወንጌላዊት ቤተክርስቲያን መካነ እየሱስ ቂርቆስ ማህበረ ምእመናን
+                    </h3>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-6">Join us for the wedding ceremony as we make our promises before God.</p>
+                    
+                    <a href="https://maps.app.goo.gl/XNzgnbWn5xVcxBsv8" target="_blank" class="inline-block bg-espresso text-white px-6 py-3 rounded-full hover:bg-[#3a271d] transition-colors shadow-md">
+                        Open in Google Maps
+                    </a>
+                </div>
+                <div class="rounded-3xl overflow-hidden shadow-lg h-96 bg-gray-200">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.536408761454!2d38.75959231538664!3d9.015026993539742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85f4822e0d3d%3A0x673a19f335b4e6e0!2sBethel%20Yealem%20Birhan%20Meserete%20Kirstos%20Church!5e0!3m2!1sen!2set!4v1680000000000!5m2!1sen!2set" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guest Pictures (Telegram) -->
+        <section class="py-20 bg-cardbg text-center px-4">
+            <h4 class="text-gray-500 uppercase tracking-widest text-sm mb-2">SHARE THE CELEBRATION</h4>
+            <h2 class="font-serif text-5xl text-espresso mb-6">Guest Pictures</h2>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto mb-10">Add a favorite photo from our special day and help us collect every beautiful memory.</p>
+            
+            <div class="bg-white/50 border-2 border-dashed border-gray-300 rounded-3xl p-12 max-w-2xl mx-auto backdrop-blur-sm">
+                <p class="text-gray-600 mb-6">Send your favorite photos directly to us on Telegram.</p>
+                <a href="https://t.me/natty_el" target="_blank" class="inline-block border-2 border-espresso text-espresso px-8 py-3 rounded-full font-medium hover:bg-espresso hover:text-white transition-colors">
+                    Share on Telegram
+                </a>
+                <p class="text-gray-400 text-sm mt-4">Opens Telegram chat with @natty_el</p>
+            </div>
+        </section>
+
+        <!-- Our Memories Gallery -->
+        <section class="py-20 max-w-7xl mx-auto px-4 text-center">
+            <h4 class="text-gray-500 uppercase tracking-widest text-sm mb-2">A COLLECTION OF MOMENTS</h4>
+            <h2 class="font-serif text-5xl text-espresso mb-12">Our memories</h2>
+            
+            <div class="flex overflow-x-auto space-x-6 pb-8 hide-scrollbar snap-x">
+                <img src="images/memory1.jpg" class="lightbox-trigger cursor-pointer h-72 w-56 object-cover rounded-2xl shadow-md snap-center -rotate-2 hover:opacity-90 transition-opacity">
+                <img src="images/memory1.jpg" class="lightbox-trigger cursor-pointer h-72 w-56 object-cover rounded-2xl shadow-md snap-center rotate-2 hover:opacity-90 transition-opacity">
+                <img src="images/memory1.jpg" class="lightbox-trigger cursor-pointer h-72 w-56 object-cover rounded-2xl shadow-md snap-center -rotate-1 hover:opacity-90 transition-opacity">
+                <img src="images/memory1.jpg" class="lightbox-trigger cursor-pointer h-72 w-56 object-cover rounded-2xl shadow-md snap-center rotate-1 hover:opacity-90 transition-opacity">
+                <img src="images/memory1.jpg" class="lightbox-trigger cursor-pointer h-72 w-56 object-cover rounded-2xl shadow-md snap-center -rotate-2 hover:opacity-90 transition-opacity">
+            </div>
+        </section>
+
+        <!-- Digital Sign Board (Wishes) -->
+        <section id="wishes" class="py-20 bg-espresso text-white">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-5xl text-espresso-light uppercase mb-4 tracking-wide">Digital Sign Board</h2>
+                    <p class="text-gray-300 text-lg max-w-2xl mx-auto">Leave a lasting memory on our digital wish board. Write a heartfelt message, or simply sign your name to celebrate this special moment with us.</p>
+                </div>
+
+                <!-- Form -->
+                <div class="max-w-xl mx-auto bg-[#3b281f] p-8 rounded-2xl shadow-xl mb-16">
+                    <form id="wishForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Your Name</label>
+                            <input type="text" id="guestName" required class="w-full bg-[#4E3629] border border-[#5c4536] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-espresso-light" placeholder="Enter your name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Your Message</label>
+                            <textarea id="guestMessage" required rows="4" class="w-full bg-[#4E3629] border border-[#5c4536] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-espresso-light" placeholder="Write your wishes..."></textarea>
+                        </div>
+                        <button type="submit" id="submitBtn" class="w-full bg-espresso-light text-espresso font-bold py-3 rounded-lg hover:bg-white transition-colors">WRITE A WISH</button>
+                    </form>
+                </div>
+
+                <!-- Messages Display -->
+                <div class="bg-[#3b281f] p-8 rounded-2xl border border-[#5c4536]">
+                    <div class="flex justify-between items-center border-b border-[#5c4536] pb-4 mb-6">
+                        <h3 class="font-serif text-2xl text-espresso-light">Messages from loved ones</h3>
+                        <span id="postCount" class="text-espresso-light font-mono text-sm">0 POSTS</span>
+                    </div>
+                    
+                    <div id="wishesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Messages will load here via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thank You Card Section -->
+        <section id="thankucard" class="py-20 max-w-7xl mx-auto px-4 text-center">
+            <h2 class="font-serif text-5xl text-espresso uppercase mb-4 tracking-wide">Thank You Card</h2>
+            <p class="text-gray-600 text-lg mb-12">Thank you for showing up and supporting us on our big day. Choose a card to keep as a memory.</p>
+            
+            <div class="flex overflow-x-auto space-x-4 pb-8 hide-scrollbar snap-x">
+                <div class="lightbox-trigger cursor-pointer h-64 w-48 bg-gray-200 rounded-xl shadow-lg flex-shrink-0 snap-center bg-cover bg-center hover:scale-105 transition-transform" style="background-image: url('images/card1.jpg');" data-image="images/card1.jpg"></div>
+                <div class="lightbox-trigger cursor-pointer h-64 w-48 bg-gray-200 rounded-xl shadow-lg flex-shrink-0 snap-center bg-cover bg-center hover:scale-105 transition-transform" style="background-image: url('images/card1.jpg');" data-image="images/card1.jpg"></div>
+                <div class="lightbox-trigger cursor-pointer h-64 w-48 bg-gray-200 rounded-xl shadow-lg flex-shrink-0 snap-center bg-cover bg-center hover:scale-105 transition-transform" style="background-image: url('images/card1.jpg');" data-image="images/card1.jpg"></div>
+                <div class="lightbox-trigger cursor-pointer h-64 w-48 bg-gray-200 rounded-xl shadow-lg flex-shrink-0 snap-center bg-cover bg-center hover:scale-105 transition-transform" style="background-image: url('images/card1.jpg');" data-image="images/card1.jpg"></div>
+                <div class="lightbox-trigger cursor-pointer h-64 w-48 bg-gray-200 rounded-xl shadow-lg flex-shrink-0 snap-center bg-cover bg-center hover:scale-105 transition-transform" style="background-image: url('images/card1.jpg');" data-image="images/card1.jpg"></div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-cardbg py-12 text-center border-t border-gray-200">
+            <h2 class="font-cursive text-5xl text-espresso mb-2">Natty & Dibo</h2>
+            <p class="text-gray-500 mb-6">November 15, 2026</p>
+            <div class="space-x-6 mb-8 text-sm font-medium text-gray-600 tracking-wider">
+                <a href="#home" class="hover:text-espresso">HOME</a>
+                <a href="#location" class="hover:text-espresso">LOCATION</a>
+            </div>
+            <p class="text-gray-500 text-sm">Thank you for celebrating with us ❤️</p>
+            <p class="text-gray-400 text-xs mt-2">© 2026 Natty & Dibo - With love, always</p>
+        </footer>
+
+        <!-- Floating Music Button -->
+        <button id="musicBtn" class="fixed bottom-6 right-6 bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center space-x-2 z-50 hover:bg-gray-800 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
+            </svg>
+            <span class="text-sm font-bold tracking-widest" id="musicText">PAUSE MUSIC</span>
+        </button>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="music/wedding.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ========================================== -->
+    <!-- LIGHTBOX MODAL -->
+    <!-- ========================================== -->
+    <div id="lightbox" class="fixed inset-0 z-[200] bg-black/90 hidden flex flex-col items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300 p-4">
+        <button id="closeLightbox" class="absolute top-6 right-6 text-white hover:text-gray-300 p-2 bg-black/50 rounded-full transition-colors z-10">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <img id="lightboxImage" src="" alt="Preview" class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl">
+        
+        <!-- Reverted to an <a> tag so we can dynamically set the download attribute -->
+        <a id="downloadBtn" href="" download class="mt-8 bg-espresso text-white px-8 py-3 rounded-full font-medium hover:bg-[#3a271d] transition-colors shadow-md inline-flex items-center gap-2 w-fit cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Download Image
+        </a>
+    </div>
+
+    <!-- JavaScript for interactions and Supabase -->
+    <script>
+        // --- 0. Landing Page & Auto-Play Logic ---
+        const landingPage = document.getElementById('landing-page');
+        const mainContent = document.getElementById('main-content');
+        const openInvitationBtn = document.getElementById('openInvitationBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const musicText = document.getElementById('musicText');
+        let isPlaying = false;
+
+        openInvitationBtn.addEventListener('click', () => {
+            landingPage.style.opacity = '0';
+            document.body.classList.remove('no-scroll');
+            bgMusic.play().catch(e => console.log("Audio play blocked by browser: ", e));
+            isPlaying = true;
+            musicText.innerText = "PAUSE MUSIC";
+
+            setTimeout(() => {
+                landingPage.style.display = 'none';
+                mainContent.classList.remove('opacity-0');
+                mainContent.classList.add('opacity-100');
+            }, 1000);
+        });
+
+        // --- 1. Music Player Logic (Toggle Button) ---
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicText.innerText = "PLAY MUSIC";
+            } else {
+                bgMusic.play();
+                musicText.innerText = "PAUSE MUSIC";
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // --- 2. Lightbox Modal & Force Download Logic ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const closeBtn = document.getElementById('closeLightbox');
+        const triggers = document.querySelectorAll('.lightbox-trigger');
+        let currentImageSrc = '';
+
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                if (trigger.tagName === 'IMG') {
+                    currentImageSrc = trigger.src;
+                } else {
+                    currentImageSrc = trigger.getAttribute('data-image');
+                }
+                
+                lightboxImage.src = currentImageSrc;
+                
+                // Set the href and download attribute on the anchor tag
+                downloadBtn.href = currentImageSrc;
+                const filename = currentImageSrc.split('/').pop() || 'wedding-image.jpg';
+                downloadBtn.setAttribute('download', filename);
+                
+                lightbox.classList.remove('hidden');
+                setTimeout(() => {
+                    lightbox.classList.remove('opacity-0');
+                    lightbox.classList.add('opacity-100');
+                }, 10);
+            });
+        });
+
+        // --- Force Download Logic ---
+        // We intercept the click to use the Blob method (forces download on live servers)
+        downloadBtn.addEventListener('click', async (e) => {
+            if (!currentImageSrc) return;
+            e.preventDefault(); // Stop default navigation
+            
+            try {
+                // Fetch the image as a Blob
+                const response = await fetch(currentImageSrc);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                
+                // Create a temporary link to trigger download
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = currentImageSrc.split('/').pop() || 'wedding-image.jpg';
+                document.body.appendChild(a);
+                a.click();
+                
+                // Clean up
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                console.error("Blob download failed (likely local testing restriction), using native download:", error);
+                
+                // Fallback: Standard <a> tag click
+                // Note: On live GitHub Pages, the try block will work perfectly. 
+                // This fallback is just in case you are testing on your computer.
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = currentImageSrc;
+                a.download = currentImageSrc.split('/').pop() || 'wedding-image.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('opacity-100');
+            lightbox.classList.add('opacity-0');
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+                lightboxImage.src = ''; 
+            }, 300);
+        }
+
+        closeBtn.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // --- 3. Supabase Integration ---
+        const SUPABASE_URL = 'https://fnfbjcccwumzhcjxckui.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_CZgiWJGac9XZ5gYU62-LXw_wUBQBcrt';
+
+        let supabaseClient = null;
+
+        if (SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE') {
+            const { createClient } = supabase;
+            supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            
+            fetchWishes();
+            
+            supabaseClient
+                .channel('public:wishes')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'wishes' }, payload => {
+                    appendWish(payload.new);
+                    updatePostCount(1);
+                })
+                .subscribe();
+        }
+
+        const wishForm = document.getElementById('wishForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        wishForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!supabaseClient) {
+                alert("Database not connected yet. Please add your Supabase keys in the code.");
+                return;
+            }
+
+            const name = document.getElementById('guestName').value;
+            const message = document.getElementById('guestMessage').value;
+
+            submitBtn.innerText = "SENDING...";
+            submitBtn.disabled = true;
+
+            const { error } = await supabaseClient
+                .from('wishes')
+                .insert([{ name: name, message: message }]);
+
+            if (error) {
+                alert("Error sending wish: " + error.message);
+            } else {
+                wishForm.reset();
+            }
+
+            submitBtn.innerText = "WRITE A WISH";
+            submitBtn.disabled = false;
+        });
+
+        async function fetchWishes() {
+            const { data, error } = await supabaseClient
+                .from('wishes')
+                .select('*')
+                .order('created_at', { ascending: true });
+
+            if (data) {
+                document.getElementById('wishesGrid').innerHTML = '';
+                data.forEach(wish => appendWish(wish));
+                document.getElementById('postCount').innerText = `${data.length} POSTS`;
+            }
+        }
+
+        function appendWish(wish) {
+            const grid = document.getElementById('wishesGrid');
+            const card = document.createElement('div');
+            const rotate = Math.floor(Math.random() * 4) - 2; 
+            
+            card.className = `bg-[#f4e8db] text-espresso p-6 rounded-md shadow-lg transform rotate-${rotate} transition-transform hover:scale-105`;
+            card.innerHTML = `
+                <p class="font-serif text-lg leading-snug mb-4">${wish.message}</p>
+                <p class="text-sm font-bold uppercase tracking-wider opacity-70">- ${wish.name}</p>
+            `;
+            grid.appendChild(card);
+        }
+
+        function updatePostCount(increment) {
+            const countSpan = document.getElementById('postCount');
+            let current = parseInt(countSpan.innerText.split(' ')[0]);
+            countSpan.innerText = `${current + increment} POSTS`;
+        }
+    </script>
+</body>
+</html>
